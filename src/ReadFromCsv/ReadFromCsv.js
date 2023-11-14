@@ -14,62 +14,53 @@ const ReadFromCsv = () => {
     const fileList = files.keys().map((file) => file.slice(2)); // Remove the './' prefix
     setCsvFiles(fileList);
   }, []);
-  const batteryChartData=[
+//   const batteryChartData=[
     
-        { time: 1699513358, batteryPercent: 45 },
-        { time: 1699513379, batteryPercent: 42 },
-        { time: 1699513579, batteryPercent: 50 },
-        { time: 1699513398, batteryPercent: 20 },
-        { time: 1699513355, batteryPercent: 60 },
-        { time: 1699513358, batteryPercent: 40 },
-        { time: 1699513355, batteryPercent: 20 },
-        { time: 1699513355, batteryPercent: 60 },
-        { time: 1699513325, batteryPercent: 20 },
-        { time: 1699513356, batteryPercent: 85 },
-        // ... other data
+//         { time: 1699513358, batteryPercent: 45 },
+//         { time: 1699513379, batteryPercent: 42 },
+//         { time: 1699513579, batteryPercent: 50 },
+//         { time: 1699513398, batteryPercent: 20 },
+//         { time: 1699513355, batteryPercent: 60 },
+//         { time: 1699513358, batteryPercent: 40 },
+//         { time: 1699513355, batteryPercent: 20 },
+//         { time: 1699513355, batteryPercent: 60 },
+//         { time: 1699513325, batteryPercent: 20 },
+//         { time: 1699513356, batteryPercent: 85 },
+//         // ... other data
       
-  ]
-// const batteryChartData = csvData
-//   .map(entry => {
-//     if (entry && typeof entry === 'object' && 'time' in entry && 'batteryPercent' in entry) {
-//       return {
-//         time: entry.time,
-//         batteryPercent: entry.batteryPercent,
-//       };
-//     } else {
-//       console.error('Invalid entry:', entry);
-//       return null; // or handle it as you see fit
-//     }
-//   })
-//   .filter(Boolean);
-// console.log(batteryChartData)
+//   ]
+const batteryChartData = csvData.slice(1, -1).map(entry => {
+    return {
+      time: entry[0],
+      batteryPercent: entry[2]
+    };
+  });
+console.log(batteryChartData)
   
 
-  const handleFileSelect = async () => {
-    const filePath = `/Reports/${selectedFile}`;
-
+const handleFileSelect = async () => {
+    const filePath = `/datascience/Reports/${selectedFile}`;
+  
     try {
       // Fetch the CSV file content
       const response = await fetch(filePath);
       const text = await response.text();
-
+  
       // Use papaparse to parse CSV content
       Papa.parse(text, {
-        header: true,
         dynamicTyping: true,
         complete: (result) => {
           // Set the parsed CSV data
           setCsvData(result.data);
-          const batteryChartData = result.data.map((entry) => ({
-            time: entry.time,
-            batteryPercent: entry.batteryPercent,
-          }));
+          console.log('Parsed CSV Data:', result.data);
         },
       });
     } catch (error) {
       console.error('Error reading CSV file:', error);
     }
   };
+  
+  
   console.log(csvData)
 
   return (
