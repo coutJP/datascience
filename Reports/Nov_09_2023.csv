@@ -1,0 +1,3 @@
+time,localTime,batteryPercent,charging,connected,bytesSent,bytesReceived,runningProc,memUsageMB,hungriestProc,hungryProcMem
+1699513358,9:02 AM,45,No,Yes,3580248,124429242,94,7128.45,svchost.exe,1335.09
+1699513379,9:02 AM,45,No,Yes,3590992,124509389,94,7055.85,svchost.exe,1337.55
