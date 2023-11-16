@@ -22,6 +22,13 @@ const batteryChartData = csvData.slice(1, -1).map(entry => {
       batteryPercent: entry[2]
     };
   });
+
+  const bytesCombinedData = csvData.slice(1, -1).map(entry => ({
+    time: entry[0],
+    bytesSent: entry[5], // Assuming bytesSent is at index 5
+    bytesReceived: entry[6], // Assuming bytesReceived is at index 6
+  }));
+
  
   //Hungriest process/mem usage
   const aggregateData = data => {
@@ -175,7 +182,30 @@ const handleFileSelect = async () => {
       <h2>Occurrence Percentage</h2>
       <OccurrencePercentageChart />
     </div>
- 
+    <div>
+  <h2>Bytes Sent and Received Over Time</h2>
+  <Line
+    data={{
+      labels: bytesCombinedData.map(entry => entry.time),
+      datasets: [
+        {
+          label: 'Bytes Sent',
+          data: bytesCombinedData.map(entry => entry.bytesSent),
+          fill: false,
+          borderColor: 'rgba(75, 192, 192, 0.2)',
+          tension: 0.1,
+        },
+        {
+          label: 'Bytes Received',
+          data: bytesCombinedData.map(entry => entry.bytesReceived),
+          fill: false,
+          borderColor: 'rgba(192, 75, 192, 0.2)',
+          tension: 0.1,
+        },
+      ],
+    }}
+  />
+</div>
   </>
 )}
     </div>
