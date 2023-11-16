@@ -1,8 +1,9 @@
 {
   "files": {
-    "main.css": "/datascience/static/css/main.7d6b7e0d.css",
-    "main.js": "/datascience/static/js/main.0a3a6cdf.js",
+    "main.css": "/datascience/static/css/main.72778e17.css",
+    "main.js": "/datascience/static/js/main.05452d4a.js",
     "static/js/787.c4c1cc80.chunk.js": "/datascience/static/js/787.c4c1cc80.chunk.js",
+    "static/media/AFK.png": "/datascience/static/media/AFK.9eea2b881ad6bad65065.png",
     "static/media/Nov_13_2023.csv": "/datascience/static/media/Nov_13_2023.407a42157c54b6b11aca.csv",
     "static/media/Nov_12_2023.csv": "/datascience/static/media/Nov_12_2023.6eb62cac96581b9da95e.csv",
     "static/media/Nov_16_2023.csv": "/datascience/static/media/Nov_16_2023.f416a58dbd2917c60371.csv",
@@ -10,12 +11,12 @@
     "static/media/Nov_14_2023.csv": "/datascience/static/media/Nov_14_2023.72baa0c0a9a10ccc2fcc.csv",
     "index.html": "/datascience/index.html",
     "static/media/Nov_09_2023.csv": "/datascience/static/media/Nov_09_2023.ec1fb20c491fffd60aa3.csv",
-    "main.7d6b7e0d.css.map": "/datascience/static/css/main.7d6b7e0d.css.map",
-    "main.0a3a6cdf.js.map": "/datascience/static/js/main.0a3a6cdf.js.map",
+    "main.72778e17.css.map": "/datascience/static/css/main.72778e17.css.map",
+    "main.05452d4a.js.map": "/datascience/static/js/main.05452d4a.js.map",
     "787.c4c1cc80.chunk.js.map": "/datascience/static/js/787.c4c1cc80.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.7d6b7e0d.css",
-    "static/js/main.0a3a6cdf.js"
+    "static/css/main.72778e17.css",
+    "static/js/main.05452d4a.js"
   ]
 }
