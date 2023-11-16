@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Papa from 'papaparse';
 import BatteryChart from './BatteryChart/BatteryChart';
-import { Line } from 'react-chartjs-2';
+import { Line ,Bar} from 'react-chartjs-2';
+import { Doughnut } from 'react-chartjs-2';
 
 const ReadFromCsv = () => {
     const [csvFiles, setCsvFiles] = useState([]);
@@ -14,29 +15,94 @@ const ReadFromCsv = () => {
     const fileList = files.keys().map((file) => file.slice(2)); // Remove the './' prefix
     setCsvFiles(fileList);
   }, []);
-//   const batteryChartData=[
-    
-//         { time: 1699513358, batteryPercent: 45 },
-//         { time: 1699513379, batteryPercent: 42 },
-//         { time: 1699513579, batteryPercent: 50 },
-//         { time: 1699513398, batteryPercent: 20 },
-//         { time: 1699513355, batteryPercent: 60 },
-//         { time: 1699513358, batteryPercent: 40 },
-//         { time: 1699513355, batteryPercent: 20 },
-//         { time: 1699513355, batteryPercent: 60 },
-//         { time: 1699513325, batteryPercent: 20 },
-//         { time: 1699513356, batteryPercent: 85 },
-//         // ... other data
-      
-//   ]
+
 const batteryChartData = csvData.slice(1, -1).map(entry => {
     return {
       time: entry[0],
       batteryPercent: entry[2]
     };
   });
-console.log(batteryChartData)
+ 
+  //Hungriest process/mem usage
+  const aggregateData = data => {
+    const aggregatedData = {};
+    data.forEach(entry => {
+      const label = entry[9];
+      const value = entry[10];
   
+      if (!aggregatedData[label]) {
+        aggregatedData[label] = {
+          totalMemory: 0,
+          count: 0,
+        };
+      }
+  
+      aggregatedData[label].totalMemory += value;
+      aggregatedData[label].count++;
+    });
+  
+    // Calculate the average memory for each process
+    const processedData = Object.keys(aggregatedData).map(label => ({
+      label,
+      value: aggregatedData[label].totalMemory / aggregatedData[label].count,
+      count: aggregatedData[label].count
+    }));
+  
+    return processedData;
+  };
+  const hungriestProcData = aggregateData(csvData.slice(1, -1));
+  const sortedHungriestProcData = hungriestProcData.sort((a, b) => b.value - a.value);
+  const HungriestProcessorChart = () => {
+    const chartData = {
+      labels: sortedHungriestProcData.map(entry => entry.label),
+      datasets: [{
+        label: 'Average Memory Usage',
+        data: sortedHungriestProcData.map(entry => entry.value),
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1,
+      }],
+    };
+  
+    const chartOptions = {
+      // Add any specific chart options here
+    };
+  
+    return <Bar data={chartData} options={chartOptions} />;
+  };
+  
+
+//hungriest process occ
+const calculatePercentage = data => {
+  const totalEntries = data.length;
+
+  return data.map(entry => ({
+    label: entry.label,
+    percentage: totalEntries !== 0 ? (entry.count / totalEntries) * 100 : 0,
+  }));
+};
+
+const OccurrencePercentageChart = () => {
+  const percentageData = calculatePercentage(hungriestProcData);
+
+  const chartData = {
+    labels: percentageData.map(entry => `${entry.label} (${entry.percentage.toFixed(2)}%)`),
+    datasets: [{
+      data: percentageData.map(entry => entry.percentage),
+      backgroundColor: [
+        'red', 'blue', 'green', 'orange','pink','yellow','purple','aqua'
+      ],
+    }],
+  };
+
+  const chartOptions = {
+    // Add any specific chart options here
+  };
+
+  return <Doughnut data={chartData} options={chartOptions} />;
+};
+
+
 
 const handleFileSelect = async () => {
     const filePath = `/datascience/Reports/${selectedFile}`;
@@ -85,6 +151,7 @@ const handleFileSelect = async () => {
         </div>
       )} */}
       {csvData.length > 0 && (
+        <>
   <div>
     <h2>Battery Percentage Over Time</h2>
     <Line
@@ -100,6 +167,16 @@ const handleFileSelect = async () => {
       }}
     />
   </div>
+  <div>
+      <h2>Hungriest Processor</h2>
+      <HungriestProcessorChart />
+    </div>
+    <div>
+      <h2>Occurrence Percentage</h2>
+      <OccurrencePercentageChart />
+    </div>
+ 
+  </>
 )}
     </div>
   );
