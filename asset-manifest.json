@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/datascience/static/css/main.f855e6bc.css",
-    "main.js": "/datascience/static/js/main.393b3aa2.js",
+    "main.js": "/datascience/static/js/main.af52e2f0.js",
     "static/js/787.c4c1cc80.chunk.js": "/datascience/static/js/787.c4c1cc80.chunk.js",
     "static/media/Nov_13_2023.csv": "/datascience/static/media/Nov_13_2023.407a42157c54b6b11aca.csv",
     "static/media/Nov_12_2023.csv": "/datascience/static/media/Nov_12_2023.6eb62cac96581b9da95e.csv",
@@ -10,11 +10,11 @@
     "index.html": "/datascience/index.html",
     "static/media/Nov_09_2023.csv": "/datascience/static/media/Nov_09_2023.ec1fb20c491fffd60aa3.csv",
     "main.f855e6bc.css.map": "/datascience/static/css/main.f855e6bc.css.map",
-    "main.393b3aa2.js.map": "/datascience/static/js/main.393b3aa2.js.map",
+    "main.af52e2f0.js.map": "/datascience/static/js/main.af52e2f0.js.map",
     "787.c4c1cc80.chunk.js.map": "/datascience/static/js/787.c4c1cc80.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.f855e6bc.css",
-    "static/js/main.393b3aa2.js"
+    "static/js/main.af52e2f0.js"
   ]
 }
