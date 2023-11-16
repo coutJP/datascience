@@ -8,6 +8,7 @@ body{
     cursor: pointer;
     margin-top: 15px;
     font-weight: 600;
-    color: blue;
+    color: gainsboro;
+    background-color:black;
     width: 100px;
 }
