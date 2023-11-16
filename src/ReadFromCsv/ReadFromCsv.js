@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import BatteryChart from './BatteryChart/BatteryChart';
 import { Line ,Bar} from 'react-chartjs-2';
 import { Doughnut } from 'react-chartjs-2';
-
+import './ReadFromCsv.css'
 const ReadFromCsv = () => {
     const [csvFiles, setCsvFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState('');
@@ -18,13 +18,13 @@ const ReadFromCsv = () => {
 
 const batteryChartData = csvData.slice(1, -1).map(entry => {
     return {
-      time: entry[0],
+      time: new Date(entry[0] * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       batteryPercent: entry[2]
     };
   });
 
   const bytesCombinedData = csvData.slice(1, -1).map(entry => ({
-    time: entry[0],
+    time: new Date(entry[0] * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     bytesSent: entry[5], // Assuming bytesSent is at index 5
     bytesReceived: entry[6], // Assuming bytesReceived is at index 6
   }));
@@ -66,7 +66,7 @@ const batteryChartData = csvData.slice(1, -1).map(entry => {
         label: 'Average Memory Usage',
         data: sortedHungriestProcData.map(entry => entry.value),
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        borderColor: 'rgba(75, 192, 192, 1)',
+        borderColor:'blue',
         borderWidth: 1,
       }],
     };
@@ -81,7 +81,7 @@ const batteryChartData = csvData.slice(1, -1).map(entry => {
 
 //hungriest process occ
 const calculatePercentage = data => {
-  const totalEntries = data.length;
+  const totalEntries = data.reduce((sum, entry) => sum + entry.count, 0);
 
   return data.map(entry => ({
     label: entry.label,
@@ -92,12 +92,18 @@ const calculatePercentage = data => {
 const OccurrencePercentageChart = () => {
   const percentageData = calculatePercentage(hungriestProcData);
 
+  // Normalize percentages to ensure the sum is 100%
+  const normalizedPercentageData = percentageData.map(entry => ({
+    label: entry.label,
+    percentage: (entry.percentage / 100) * 100,
+  }));
+
   const chartData = {
-    labels: percentageData.map(entry => `${entry.label} (${entry.percentage.toFixed(2)}%)`),
+    labels: normalizedPercentageData.map(entry => `${entry.label} (${entry.percentage.toFixed(2)}%)`),
     datasets: [{
-      data: percentageData.map(entry => entry.percentage),
+      data: normalizedPercentageData.map(entry => entry.percentage),
       backgroundColor: [
-        'red', 'blue', 'green', 'orange','pink','yellow','purple','aqua'
+        'red', 'blue', 'green', 'orange', 'pink', 'yellow', 'purple', 'aqua'
       ],
     }],
   };
@@ -108,6 +114,7 @@ const OccurrencePercentageChart = () => {
 
   return <Doughnut data={chartData} options={chartOptions} />;
 };
+
 
 
 
@@ -138,7 +145,7 @@ const handleFileSelect = async () => {
 
   return (
     <div>
-      <select onChange={(e) => setSelectedFile(e.target.value)} value={selectedFile}>
+      <select className="select" onChange={(e) => setSelectedFile(e.target.value)} value={selectedFile}>
         <option value="">Select a CSV file</option>
         {csvFiles.map((file, index) => (
           <option key={index} value={file}>
@@ -158,8 +165,8 @@ const handleFileSelect = async () => {
         </div>
       )} */}
       {csvData.length > 0 && (
-        <>
-  <div>
+        <div className='chart_container'>
+  <div className='chart'>
     <h2>Battery Percentage Over Time</h2>
     <Line
       data={{
@@ -167,22 +174,22 @@ const handleFileSelect = async () => {
         datasets: [{
           label: 'Battery Percentage',
           data: batteryChartData.map(entry => entry.batteryPercent),
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
+          fill: true,
+          borderColor:'blue',
           tension: 0.1,
         }],
       }}
     />
   </div>
-  <div>
-      <h2>Hungriest Processor</h2>
+  <div  className='chart'>
+      <h2>Hungriest Process</h2>
       <HungriestProcessorChart />
     </div>
-    <div>
-      <h2>Occurrence Percentage</h2>
+    <div className='Dchart'>
+      <h2>Process Occurrence</h2>
       <OccurrencePercentageChart />
     </div>
-    <div>
+    <div className='chart'>
   <h2>Bytes Sent and Received Over Time</h2>
   <Line
     data={{
@@ -192,21 +199,21 @@ const handleFileSelect = async () => {
           label: 'Bytes Sent',
           data: bytesCombinedData.map(entry => entry.bytesSent),
           fill: false,
-          borderColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.1,
+          borderColor: 'blue',
+          tension:0.1,
         },
         {
           label: 'Bytes Received',
           data: bytesCombinedData.map(entry => entry.bytesReceived),
           fill: false,
-          borderColor: 'rgba(192, 75, 192, 0.2)',
+          borderColor: 'red',
           tension: 0.1,
         },
       ],
     }}
   />
 </div>
-  </>
+  </div>
 )}
     </div>
   );
