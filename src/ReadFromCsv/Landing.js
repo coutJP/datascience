@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Landing.css'
 import { Link } from 'react-router-dom';
 import { AiOutlineArrowRight } from 'react-icons/ai';
+import img from './AFK.png'
 const WordByWordDisplay = ({ paragraph }) => {
   const [lines, setLines] = useState([]);
   const [showButton, setShowButton] = useState(false);
@@ -35,6 +36,7 @@ const WordByWordDisplay = ({ paragraph }) => {
 
   return (
     <div>
+      <img className='image' src={img}/>
       {lines.map((line, index) => (
         <h1 className='text' key={index}>{line}</h1>
       ))}
