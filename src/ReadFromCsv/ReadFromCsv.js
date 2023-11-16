@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import Papa from 'papaparse';
 import BatteryChart from './BatteryChart/BatteryChart';
 import { Line ,Bar} from 'react-chartjs-2';
 import { Doughnut } from 'react-chartjs-2';
+import { useReactToPrint } from 'react-to-print';
 import './ReadFromCsv.css'
+import { BsCloudDownload } from "react-icons/bs";
+import { AiOutlineCloseCircle } from "react-icons/ai";
+
+
 const ReadFromCsv = () => {
-    const [csvFiles, setCsvFiles] = useState([]);
+  const [csvFiles, setCsvFiles] = useState([]);
   const [selectedFile, setSelectedFile] = useState('');
   const [csvData, setCsvData] = useState([]);
+  const componentRef = useRef();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
 
   useEffect(() => {
     // Fetch the list of CSV files directly from the 'Reports' folder
@@ -116,6 +126,10 @@ const OccurrencePercentageChart = () => {
 };
 
 
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
 
 
 const handleFileSelect = async () => {
@@ -139,9 +153,33 @@ const handleFileSelect = async () => {
       console.error('Error reading CSV file:', error);
     }
   };
-  
+  useEffect(() => {
+    // Trigger visualization when a file is selected
+    if (selectedFile) {
+      handleFileSelect();
+    }
+  }, [selectedFile]); 
   
   console.log(csvData)
+  // Calculate average battery percentage
+  const convertToNumber = value => (isNaN(value) ? 0 : parseFloat(value));
+
+  const averageBatteryPercent = csvData.length > 1
+    ? csvData.slice(1).reduce((sum, entry) => sum + convertToNumber(entry[2]), 0) / (csvData.length - 1)
+    : 0;
+  
+  const averageBytesSent = csvData.length > 1
+    ? csvData.slice(1).reduce((sum, entry) => sum + convertToNumber(entry[5]), 0) / (csvData.length - 1)
+    : 0;
+  
+  const averageBytesReceived = csvData.length > 1
+    ? csvData.slice(1).reduce((sum, entry) => sum + convertToNumber(entry[6]), 0) / (csvData.length - 1)
+    : 0;
+  
+  const averageRunningProcessor = csvData.length > 1
+    ? csvData.slice(1).reduce((sum, entry) => sum + convertToNumber(entry[7]), 0) / (csvData.length - 1)
+    : 0;
+  
 
   return (
     <div>
@@ -154,9 +192,37 @@ const handleFileSelect = async () => {
         ))}
       </select>
 
-      {selectedFile && (
-        <button onClick={handleFileSelect}>view chart</button>
+    {selectedFile && (
+          <button className='save' onClick={togglePopup}>Numeric Report</button>
+          )}
+      
+      {isPopupOpen && (
+        <div className='popup'>
+          {/* <div className='close_cont' >
+           <AiOutlineCloseCircle className='close' onClick={togglePopup}/>
+           </div> */}
+          <div className='popupContent'>
+          <p>Average Battery Percentage: {averageBatteryPercent}</p>
+          <p>Average Bytes Sent: {averageBytesSent}</p>
+          <p>Average Bytes Received: {averageBytesReceived}</p>
+          <p>Average Running Processor: {averageRunningProcessor}</p>
+          <button className='close' onClick={togglePopup}>Close</button>
+          </div>
+        </div>
       )}
+
+      {/* {selectedFile && (
+        <button className='view' onClick={handleFileSelect}>Visualize</button>
+      )} */}
+
+{csvData.length > 0 && (
+    <div>
+     
+      <button className='save' onClick={handlePrint}>
+      <BsCloudDownload className='icon'/>
+      Save as PDF</button>
+    </div>
+)}
 
       {/* {csvData.length > 0 && (
         <div>
@@ -164,6 +230,7 @@ const handleFileSelect = async () => {
           <pre>{JSON.stringify(csvData, null, 2)}</pre>
         </div>
       )} */}
+     <div ref={componentRef}>
       {csvData.length > 0 && (
         <div className='chart_container'>
   <div className='chart'>
@@ -215,6 +282,8 @@ const handleFileSelect = async () => {
 </div>
   </div>
 )}
+</div>
+
     </div>
   );
 };
