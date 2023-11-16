@@ -202,10 +202,10 @@ const handleFileSelect = async () => {
            <AiOutlineCloseCircle className='close' onClick={togglePopup}/>
            </div> */}
           <div className='popupContent'>
-          <p>Average Battery Percentage: {averageBatteryPercent}</p>
-          <p>Average Bytes Sent: {averageBytesSent}</p>
-          <p>Average Bytes Received: {averageBytesReceived}</p>
-          <p>Average Running Processor: {averageRunningProcessor}</p>
+          <p>Average Battery Percentage: {averageBatteryPercent.toFixed(2)}</p>
+          <p>Average MBytes Sent: {(averageBytesSent/1000000).toFixed(2)}</p>
+          <p>Average MBytes Received: {(averageBytesReceived/1000000).toFixed(2)}</p>
+          <p>Average Running Processor: {averageRunningProcessor.toFixed(2)}</p>
           <button className='close' onClick={togglePopup}>Close</button>
           </div>
         </div>
@@ -257,21 +257,21 @@ const handleFileSelect = async () => {
       <OccurrencePercentageChart />
     </div>
     <div className='chart'>
-  <h2>Bytes Sent and Received Over Time</h2>
+  <h2>MBytes Sent and Received Over Time</h2>
   <Line
     data={{
       labels: bytesCombinedData.map(entry => entry.time),
       datasets: [
         {
-          label: 'Bytes Sent',
-          data: bytesCombinedData.map(entry => entry.bytesSent),
+          label: 'MBytes Sent',
+          data: bytesCombinedData.map(entry => entry.bytesSent/1000000),
           fill: false,
           borderColor: 'blue',
           tension:0.1,
         },
         {
-          label: 'Bytes Received',
-          data: bytesCombinedData.map(entry => entry.bytesReceived),
+          label: 'MBytes Received',
+          data: bytesCombinedData.map(entry => entry.bytesReceived/1000000),
           fill: false,
           borderColor: 'red',
           tension: 0.1,
