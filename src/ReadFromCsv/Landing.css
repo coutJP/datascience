@@ -4,6 +4,7 @@ body{
 .image{
     width: 300px;
     height: 200px;
+    cursor: pointer;
 }
 .start{
     border-radius: 10px;
@@ -15,4 +16,13 @@ body{
     color: gainsboro;
     background-color:black;
     width: 100px;
+    margin-bottom: 50px;
+    border: 1px solid black;
+
+}
+
+.start:hover{
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
 }

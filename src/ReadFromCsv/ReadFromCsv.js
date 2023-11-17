@@ -184,7 +184,7 @@ const handleFileSelect = async () => {
   return (
     <div>
       <select className="select" onChange={(e) => setSelectedFile(e.target.value)} value={selectedFile}>
-        <option value="">Select a CSV file</option>
+        <option value="">Pick a Day</option>
         {csvFiles.map((file, index) => (
           <option key={index} value={file}>
             {file}
