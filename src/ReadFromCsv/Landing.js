@@ -36,9 +36,9 @@ const WordByWordDisplay = ({ paragraph }) => {
 
   return (
     <div>
-      <Link to={'/read'}>
+      {/* <Link to={'/read'}>
       <img className='image' src={img}/>
-      </Link>
+      </Link> */}
       {lines.map((line, index) => (
         <h1 className='text' key={index}>{line}</h1>
       ))}
